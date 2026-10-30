@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>汉语复习课 · Китайский на 90 минут</title>
+<style>
+  :root{
+    --peach:#FFE9E3; --mint:#E6F4EA; --sky:#E8F3FD; --lemon:#FFF6DE;
+    --rose:#FFD6E0; --lav:#EFE6FF; --ink:#3d3a4e; --soft:#7a7590;
+    --accent:#ff7d6b; --accent2:#5aa9e6; --accent3:#59c28a; --accent4:#f4b942;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    font-family:"Segoe UI",-apple-system,"Helvetica Neue",Arial,sans-serif;
+    background:linear-gradient(160deg,#fff7f4 0%,#f4f9ff 50%,#f3fdf7 100%);
+    color:var(--ink); line-height:1.6; padding:24px 16px 80px;
+  }
+  .wrap{max-width:920px;margin:0 auto;}
+
+  /* ---------- header ---------- */
+  header{
+    text-align:center; padding:42px 20px 30px; border-radius:32px;
+    background:linear-gradient(135deg,#ffd9d2,#ffeecf,#d7f0ff,#dcf7e8);
+    box-shadow:0 12px 40px rgba(255,125,107,.15);
+    position:relative; overflow:hidden;
+  }
+  header .zh{font-size:56px;font-weight:800;letter-spacing:8px;color:#ff6f5c;text-shadow:2px 3px 0 #fff;}
+  header h1{font-size:26px;margin-top:8px;color:var(--ink);}
+  header p{color:var(--soft);margin-top:6px;font-size:15px;}
+  .timer-badge{
+    display:inline-block;margin-top:14px;background:#fff;color:#ff6f5c;font-weight:700;
+    padding:8px 22px;border-radius:999px;box-shadow:0 4px 14px rgba(0,0,0,.08);font-size:15px;
+  }
+  .floaty{position:absolute;font-size:34px;opacity:.55;animation:bob 5s ease-in-out infinite;}
+  @keyframes bob{0%,100%{transform:translateY(0) rotate(-6deg)}50%{transform:translateY(-14px) rotate(6deg)}}
+
+  /* ---------- sections ---------- */
+  section{margin-top:44px;}
+  .sec-title{
+    display:flex;align-items:center;gap:12px;margin-bottom:20px;
+  }
+  .sec-title .emoji{
+    width:52px;height:52px;border-radius:16px;display:flex;align-items:center;justify-content:center;
+    font-size:26px;background:#fff;box-shadow:0 6px 18px rgba(0,0,0,.08);flex:none;
+  }
+  .sec-title h2{font-size:24px;}
+  .sec-title small{display:block;color:var(--soft);font-weight:400;font-size:14px;}
+
+  /* ---------- plan ---------- */
+  .plan{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;}
+  .phase{
+    background:#fff;border-radius:22px;padding:18px 20px;box-shadow:0 6px 20px rgba(0,0,0,.06);
+    border-top:6px solid var(--accent);transition:transform .25s;
+  }
+  .phase:hover{transform:translateY(-4px);}
+  .phase:nth-child(2){border-color:var(--accent2)}
+  .phase:nth-child(3){border-color:var(--accent3)}
+  .phase:nth-child(4){border-color:var(--accent4)}
+  .phase:nth-child(5){border-color:#c79bff}
+  .phase .time{font-weight:800;color:#ff6f5c;font-size:14px;}
+  .phase h3{font-size:17px;margin:4px 0 6px;}
+  .phase p{font-size:13.5px;color:var(--soft);}
+
+  /* ---------- vocab ---------- */
+  .lesson-block{background:#fff;border-radius:26px;padding:24px;margin-bottom:22px;box-shadow:0 8px 26px rgba(0,0,0,.06);}
+  .lesson-block h3{
+    display:flex;align-items:center;gap:10px;font-size:19px;margin-bottom:16px;flex-wrap:wrap;
+  }
+  .tag{font-size:12px;font-weight:700;padding:3px 12px;border-radius:999px;color:#fff;}
+  .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;}
+  .card{
+    perspective:700px;height:120px;cursor:pointer;
+  }
+  .card-inner{
+    position:relative;width:100%;height:100%;transform-style:preserve-3d;
+    transition:transform .55s cubic-bezier(.4,.1,.2,1.1);
+  }
+  .card.flipped .card-inner{transform:rotateY(180deg);}
+  .face{
+    position:absolute;inset:0;backface-visibility:hidden;border-radius:18px;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+    padding:10px;text-align:center;box-shadow:0 4px 12px rgba(0,0,0,.07);
+  }
+  .face.front .zh-w{font-size:34px;font-weight:800;}
+  .face.front .py{color:var(--soft);font-size:15px;}
+  .face.back{transform:rotateY(180deg);}
+  .face.back .ru{font-size:16px;font-weight:600;}
+  .face.back .py2{color:var(--soft);font-size:13px;}
+  .hint{font-size:12.5px;color:var(--soft);margin-top:12px;text-align:center;}
+  .f1{background:var(--peach);} .f2{background:var(--sky);} .f3{background:var(--mint);} .f4{background:var(--lemon);}
+
+  /* ---------- sentences ---------- */
+  .sentence{
+    background:#fff;border-radius:24px;padding:22px 24px;margin-bottom:18px;
+    box-shadow:0 8px 26px rgba(0,0,0,.06);border-left:8px solid var(--accent);
+  }
+  .sentence:nth-child(even of .sentence){border-left-color:var(--accent2);}
+  .s-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;}
+  .s-num{
+    background:#ff6f5c;color:#fff;font-weight:800;width:32px;height:32px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;flex:none;font-size:15px;
+  }
+  .s-zh{font-size:30px;font-weight:800;}
+  .s-py{color:var(--soft);font-size:15px;}
+  .s-ru{color:#ff6f5c;font-weight:700;font-size:16px;margin:6px 0 12px;}
+  .parts{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;}
+  .part{
+    background:var(--lav);border-radius:12px;padding:6px 12px;text-align:center;min-width:64px;
+  }
+  .part b{display:block;font-size:19px;}
+  .part span{font-size:12px;color:var(--soft);}
+  .part.gr{background:#ffe3dd;} .part.gr2{background:#dceeff;}
+  .note{
+    background:var(--lemon);border-radius:14px;padding:12px 16px;font-size:14.5px;
+  }
+  .note b{color:#d99a12;}
+  .formula{
+    display:inline-block;background:#3d3a4e;color:#fff;border-radius:10px;
+    padding:6px 14px;font-size:15px;margin:4px 0;letter-spacing:1px;
+  }
+
+  /* ---------- grammar rules ---------- */
+  .rules{display:grid;gap:14px;}
+  .rule{
+    background:#fff;border-radius:20px;padding:18px 22px;box-shadow:0 6px 20px rgba(0,0,0,.05);
+  }
+  .rule h4{color:#ff6f5c;font-size:17px;margin-bottom:6px;}
+  .rule p{font-size:14.5px;color:var(--soft);}
+  .rule .ex{background:var(--mint);border-radius:10px;padding:8px 14px;margin-top:10px;font-size:15px;display:inline-block;}
+
+  footer{text-align:center;margin-top:56px;color:var(--soft);font-size:13.5px;}
+  .btn-row{text-align:center;margin-top:16px;}
+  button{
+    background:#ff6f5c;color:#fff;border:none;border-radius:999px;padding:12px 30px;
+    font-size:16px;font-weight:700;cursor:pointer;box-shadow:0 6px 18px rgba(255,111,92,.35);
+    transition:transform .2s;
+  }
+  button:hover{transform:scale(1.05);}
+  @media(max-width:560px){
+    header .zh{font-size:42px;}
+    .s-zh{font-size:24px;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <span class="floaty" style="top:14px;left:22px;">🐼</span>
+  <span class="floaty" style="top:20px;right:26px;animation-delay:1s;">🏮</span>
+  <span class="floaty" style="bottom:12px;left:44%;animation-delay:2s;">✏️</span>
+  <div class="zh">汉语复习课</div>
+  <h1>Повторение китайского · Все уроки</h1>
+  <p>Иероглифы, предложения и грамматика — всё в одном месте</p>
+  <div class="timer-badge">⏱ План на полтора часа (90 минут)</div>
+</header>
+
+<!-- ================= PLAN ================= -->
+<section>
+  <div class="sec-title"><div class="emoji">🗓️</div>
+    <h2>План занятия <small>распределите 90 минут так</small></h2>
+  </div>
+  <div class="plan">
+    <div class="phase"><div class="time">0:00 – 0:10</div><h3>🔥 Разминка</h3><p>Урок 1: приветствия. Прокрутите карточки 你好 · 你 · 好 · 我 · 很 · 吗 — вслух, с пиньинем.</p></div>
+    <div class="phase"><div class="time">0:10 – 0:25</div><h3>🌆 Урок 2: город и страна</h3><p>Страны и города: 中国 · 英国 · 美国 · 北京 · 上海 · 香港. Пары вопрос–ответ про 哪儿 и 哪国人.</p></div>
+    <div class="phase"><div class="time">0:25 – 0:45</div><h3>👨‍👩‍👧‍👦 Урок 4: семья — ГЛАВНОЕ</h3><p>Разбор 6 предложений и грамматики ниже. Проговаривайте каждое предложение 3 раза вслух.</p></div>
+    <div class="phase"><div class="time">0:45 – 1:10</div><h3>🃏 Карточки наоборот</h3><p>Переворачивайте карточки: смотрите на русский перевод → называйте иероглиф и пиньинь вслух. 2 полных круга.</p></div>
+    <div class="phase"><div class="time">1:10 – 1:30</div><h3>✍️ Самопроверка</h3><p>Закройте переводы, напишите все иероглифы с пиньинем на бумаге. Проверьте. Составьте 3 своих предложения по формулам.</p></div>
+  </div>
+</section>
+
+<!-- ================= VOCAB ================= -->
+<section>
+  <div class="sec-title"><div class="emoji">📚</div>
+    <h2>Все иероглифы на повторение <small>нажмите на карточку — она перевернётся</small></h2>
+  </div>
+
+  <div class="lesson-block">
+    <h3>Урок 1 · Приветствия <span class="tag" style="background:#5aa9e6">你好！</span></h3>
+    <div class="cards">
+      <div class="card" onclick="this.classList.toggle('flipped')"><div class="card-inner"><div class="face front f2"><div class="zh-w">你</div><div class="py">nǐ</div></div><div class="face back f2"><div class="ru">ты, вы</div><div class="py2">nǐ</div></div></div></div>
+      <div class="card" onclick="this.classList.toggle('flipped')"><div class="card-inner"><div class="face front f2"><div class="zh-w">好</div><div class="py">hǎo</div></div><div class="face back f2"><div class="ru">хорошо</div><div class="py2">hǎo</div></div></div></div>
+      <div class="card" onclick="this.classList.toggle('flipped')"><div class="card-inner"><div class="face front f2"><div class="zh-w">你好</div><div class="py">nǐ hǎo</div></div><div class="face back f2"><div class="ru">привет!</div><div class="py2">nǐ hǎo</div></div></div></div>
+      <div class="card" onclick="this.classList.toggle('flipped')"><div class="card-inner"><div class="face front f2"><div class="zh-w">吗</div><div class="py">ma</div></div><div class="face back f2"><div class="ru">вопрос. частица</div><div class="py2">ma</div></div></div></div>
+      <div class="card" onclick="this.classList.toggle('flipped')"><div class="card-inner"><div class="face front f2"><div class="zh-w">我</div><div class="py">wǒ</div></div><div class="face back f2"><div class="ru">я, меня</div><div class="py2">wǒ</div></div></div></div>
+      <div class="card" onclick="this.classList.toggle('flipped')"><div class="card-inner"><div class="face front f2"><div class="zh-w">很</div><div class="py">hěn</div></div><div class="face back f2"><div class="ru">очень</div><div class="py2">hěn</div></div></div></div>
+    </div>
+  </div>
+
+  <div class="lesson-block">
+    <h3>Урок 2 · Страна и город <span class="tag" style="background:#59c28a">国家 · 城市</span></h3>
+    <div class="cards">
+      <div class="card" onclick="this.classList.toggle('flipped')"><div class="card-inner"><div class="face front f3"><div class="zh-w">叫</div><div class="py">jiào</div></div><div class="face back f3"><div class="ru">звать, называться</div><div class="py2">jiào</div></div></div></div>
+      <div class="card" onclick="this.classList.toggle('flipped')"><div class="card-inner"><div class="face front f3"><div class="zh-w">什么</div><div class="py">shénme</div></div><div class="face back f3"><div class="ru">что? какой?</div><div class="py2">shénme</div></div></div></div>
+      <div class="card" onclick="this.classList.toggle('flipped')"><div class="card-inner"><div class="face front f3"><div class="zh-w">是</div><div class="py">shì</div></div><div class="face back f3"><div class="ru">быть, являться</div><div class="py2">shì</div></div></div></div>
+      <div class="card" onclick="this.classList.toggle('flipped')"><div class="card-inner"><div class="face front f3"><div class="zh-w">哪</div><div class="py">nǎ</div></div><div class="face back f3"><div class="ru">который? какой?</div><div class="py2">nǎ</div></div></div></div>
+      <div class="card" onclick="this.classList.toggle('flipped')"><div class="card-inner"><div class="face front f3"><div class="zh-w">国</div><div class="py">guó</div></div><div class="face back f3"><div class="ru">страна, нация</div><div class="py2">guó</div></div></div></div>
+      <div class="card" onclick="this.classList.toggle('flipped')"><div class="card-inner"><div class="face front f3"><div class="zh-w">人</div><div class="py">rén</div></div><div class="face back f3"><div class="ru">человек, люди</div><div class="py2">rén</div></div></div></div>
+      <div class="card" onclick="this.classList.toggle('flipped')"><div class="card-inner"><div class="face front f3"><div class="zh-w">中国</div><div class="py">Zhōngguó</div></div><div class="face back f3"><div class="ru">Китай</div><div class="py2">Zhōngguó</div></div></div></div>
+      <div class="card" onclick="this.classList.toggle('flipped')"><div class="card-inner"><div class="face front f3"><div class="zh-w">英国</div><div class="py">Yīngguó</div></div><div class="face back f3"><div class="ru">Великобритания</div><div class="py2">Yīngguó</div></div></div></div>
+      <div class="card" onclick="this.classList.toggle('flipped')"><div class="card-inner"><div class="face front f3"><div class="zh-w">美国</div><div class="py">Měiguó</div></div><div class="face back f3"><div class="ru">США</div><div class="py2">Měiguó</div></div></div></div>
+      <div class="card" onclick="this.classList.toggle('flipped')"><div class="card-inner"><div class="face front f3"><div class="zh-w">家</div><div class="py">jiā</div></div><div class="face back f3"><div class="ru">дом, семья</div><div class="py2">jiā</div></div></div></div>
+      <div class="card" onclick="this.classList.toggle('flipped')"><div class="card-inner"><div class="face front f3"><div class="zh-w">在</div><div class="py">zài</div></div><div class="face back f3"><div class="ru">находиться в/на</div><div class="py2">zài</div></div></div></div>
+      <div class="card" onclick="this.classList.toggle('flipped')"><div class="card-inner"><div class="face front f3"><div class="zh-w">哪儿</div><div class="py">nǎr</div></div><div class="face back f3"><div class="ru">где? куда?</div><div class="py2">nǎr</div></div></div></div>
+      <div class="card" onclick="this.classList.toggle('flipped')"><div class="card-inner"><div class="face front f3"><div class="zh-w">北京</div><div class="py">Běijīng</div></div><div class="face back f3"><div class="ru">Пекин</div><div class="py2">Běijīng</div></div></div></div>
+      <div class="card" onclick="this.classList.toggle('flipped')"><div class="card-inner"><div class="face front f3"><div class="zh-w">上海</div><div class="py">Shànghǎi</div></div><div class="face back f3"><div class="ru">Шанхай</div><div class="py2">Shànghǎi</div></div></div></div>
+      <div class="card" onclick="this.classList.toggle('flipped')"><div class="card-inner"><div class="face front f3"><div class="zh-w">香港</div><div class="py">Xiānggǎng</div></div><div class="face back f3"><div class="ru">Гонконг</div><div class="py2">Xiānggǎng</div></div></div></div>
+      <div class="card" onclick="this.classList.toggle('flipped')"><div class="card-inner"><div class="face front f3"><div class="zh-w">他</div><div class="py">tā</div></div><div class="face back f3"><div class="ru">он, его</div><div class="py2">tā</div></div></div></div>
+    </div>
+  </div>
+
+  <div class="lesson-block">
+    <h3>Урок 4 · Семья <span class="tag" style="background:#ff7d6b">我的家</span></h3>
+    <div class="cards">
+      <div class="card" onclick="this.classList.toggle('flipped')"><div class="card-inner"><div class="face front f1"><div class="zh-w">这</div><div class="py">zhè</div></div><div class="face back f1"><div class="ru">это</div><div class="py2">zhè</div></div></div></div>
+      <div class="card" onclick="this.classList.toggle('flipped')"><div class="card-inner"><div class="face front f1"><div class="zh-w">那</div><div class="py">nà</div></div><div class="face back f1"><div class="ru">то</div><div class="py2">nà</div></div></div></div>
+      <div class="card" onclick="this.classList.toggle('flipped')"><div class="card-inner"><div class="face front f1"><div class="zh-w">爸爸</div><div class="py">bàba</div></div><div class="face back f1"><div class="ru">папа</div><div class="py2">bàba</div></div></div></div>
+      <div class="card" onclick="this.classList.toggle('flipped')"><div class="card-inner"><div class="face front f1"><div class="zh-w">妈妈</div><div class="py">māma</div></div><div class="face back f1"><div class="ru">мама</div><div class="py2">māma</div></div></div></div>
+      <div class="card" onclick="this.classList.toggle('flipped')"><div class="card-inner"><div class="face front f1"><div class="zh-w">哥哥</div><div class="py">gēge</div></div><div class="face back f1"><div class="ru">старший брат</div><div class="py2">gēge</div></div></div></div>
+      <div class="card" onclick="this.classList.toggle('flipped')"><div class="card-inner"><div class="face front f1"><div class="zh-w">姐姐</div><div class="py">jiějie</div></div><div class="face back f1"><div class="ru">старшая сестра</div><div class="py2">jiějie</div></div></div></div>
+      <div class="card" onclick="this.classList.toggle('flipped')"><div class="card-inner"><div class="face front f1"><div class="zh-w">不</div><div class="py">bù</div></div><div class="face back f1"><div class="ru">не, нет</div><div class="py2">bù</div></div></div></div>
+    </div>
+  </div>
+  <p class="hint">💡 Совет: сначала читайте иероглиф + пиньинь вслух, потом щёлкайте и проверяйте перевод. Второй круг — наоборот: перевод → иероглиф.</p>
+  <div class="btn-row"><button onclick="document.querySelectorAll('.card').forEach(c=>c.classList.add('flipped'))">🔃 Перевернуть все</button></div>
+</section>
+
+<!-- ================= SENTENCES ================= -->
+<section>
+  <div class="sec-title"><div class="emoji">🧩</div>
+    <h2>Разбор предложений — Урок 4 «Моя семья» <small>первый скрин: 6 предложений разобраны по косточкам</small></h2>
+  </div>
+
+  <div class="sentence">
+    <div class="s-head"><div class="s-num">1</div><div class="s-zh">这是我爸爸。</div><div class="s-py">Zhè shì wǒ bàba.</div></div>
+    <div class="s-ru">Это мой папа.</div>
+    <div class="parts">
+      <div class="part gr"><b>这</b><span>zhè — это</span></div>
+      <div class="part gr"><b>是</b><span>shì — есть/это</span></div>
+      <div class="part"><b>我</b><span>wǒ — мой</span></div>
+      <div class="part"><b>爸爸</b><span>bàba — папа</span></div>
+    </div>
+    <div class="note"><b>Формула:</b> <span class="formula">这 + 是 + (我) + человек</span> — «Это мой/моя …». Слово 我 стоит ПЕРЕД существительным, без «мой» отдельным словом.</div>
+  </div>
+
+  <div class="sentence">
+    <div class="s-head"><div class="s-num">2</div><div class="s-zh">那是我妈妈。</div><div class="s-py">Nà shì wǒ māma.</div></div>
+    <div class="s-ru">То моя мама.</div>
+    <div class="parts">
+      <div class="part gr"><b>那</b><span>nà — то</span></div>
+      <div class="part gr"><b>是</b><span>shì — есть</span></div>
+      <div class="part"><b>我</b><span>wǒ — моя</span></div>
+      <div class="part"><b>妈妈</b><span>māma — мама</span></div>
+    </div>
+    <div class="note"><b>Пара 这/那:</b> <span class="formula">这 = близко (это)</span> <span class="formula">那 = далеко (то)</span>. Та же формула, просто указываем на более далёкий предмет.</div>
+  </div>
+
+  <div class="sentence">
+    <div class="s-head"><div class="s-num">3</div><div class="s-zh">这是我。</div><div class="s-py">Zhè shì wǒ.</div></div>
+    <div class="s-ru">Это я.</div>
+    <div class="parts">
+      <div class="part gr"><b>这</b><span>zhè — это</span></div>
+      <div class="part gr"><b>是</b><span>shì — есть</span></div>
+      <div class="part"><b>我</b><span>wǒ — я</span></div>
+    </div>
+    <div class="note"><b>Важно:</b> после 是 личное местоимение стоит без изменений: 这是我 — «это я» (не «это меня»). Представляем себя короткой формулой.</div>
+  </div>
+
+  <div class="sentence">
+    <div class="s-head"><div class="s-num">4</div><div class="s-zh">那不是我爸爸。</div><div class="s-py">Nà bú shì wǒ bàba.</div></div>
+    <div class="s-ru">То не мой папа.</div>
+    <div class="parts">
+      <div class="part gr"><b>那</b><span>nà — то</span></div>
+      <div class="part gr2"><b>不是</b><span>bú shì — не есть</span></div>
+      <div class="part"><b>我</b><span>wǒ — мой</span></div>
+      <div class="part"><b>爸爸</b><span>bàba — папа</span></div>
+    </div>
+    <div class="note"><b>Отрицание:</b> отрицание 不 ставится ПЕРЕД 是: <span class="formula">… 不 + 是 …</span>. Внимание: 不 перед четвёртым тоном shì читается как bú (второй тон) — «то не мой папа».</div>
+  </div>
+
+  <div class="sentence">
+    <div class="s-head"><div class="s-num">5</div><div class="s-zh">这是你哥哥吗？</div><div class="s-py">Zhè shì nǐ gēge ma?</div></div>
+    <div class="s-ru">Это твой старший брат?</div>
+    <div class="parts">
+      <div class="part gr"><b>这是</b><span>zhè shì — это</span></div>
+      <div class="part"><b>你</b><span>nǐ — твой</span></div>
+      <div class="part"><b>哥哥</b><span>gēge — ст. брат</span></div>
+      <div class="part gr2"><b>吗</b><span>ma — ?</span></div>
+    </div>
+    <div class="note"><b>Вопрос с 吗:</b> берём обычное предложение и добавляем 吗 в конец — и всё! <span class="formula">Это твой брат. → Это твой брат吗？</span> Порядок слов не меняется.</div>
+  </div>
+
+  <div class="sentence">
+    <div class="s-head"><div class="s-num">6</div><div class="s-zh">他是英国人吗？</div><div class="s-py">Tā shì Yīngguórén ma?</div></div>
+    <div class="s-ru">Он англичанин? / Он из Великобритании?</div>
+    <div class="parts">
+      <div class="part"><b>他</b><span>tā — он</span></div>
+      <div class="part gr"><b>是</b><span>shì — есть</span></div>
+      <div class="part gr2"><b>英国人</b><span>Yīngguórén — англичанин</span></div>
+      <div class="part gr2"><b>吗</b><span>ma — ?</span></div>
+    </div>
+    <div class="note"><b>Словообразование:</b> страна 英国 + 人 = «человек из страны»: <span class="formula">国 + 人 = житель страны</span> → 中国人 (китаец), 美国人 (американец). Итоговая формула: <span class="formula">他 + 是 + (国)+人 + 吗？</span></div>
+  </div>
+</section>
+
+<!-- ================= GRAMMAR ================= -->
+<section>
+  <div class="sec-title"><div class="emoji">📐</div>
+    <h2>Грамматика — заучить как таблицу умножения <small>4 правила покрывают весь урок</small></h2>
+  </div>
+  <div class="rules">
+    <div class="rule"><h4>1️⃣ Указание «это/то» — 这 / 那 + 是</h4>
+      <p>这 (zhè) — «это» (близко), 那 (nà) — «то» (далеко). Между ними всегда ставится глагол 是 (быть).</p>
+      <div class="ex">这是我妈妈。= Это моя мама。&nbsp;&nbsp;|&nbsp;&nbsp;那是家。= То дом。</div>
+    </div>
+    <div class="rule"><h4>2️⃣ Отрицание — 不 перед 是</h4>
+      <p>Чтобы сказать «не», ставим 不 (bù) сразу перед 是. Ничего больше не меняется.</p>
+      <div class="ex">这不是我哥哥。= Это не мой брат。&nbsp;&nbsp;|&nbsp;&nbsp;那不是我。= То не я。</div>
+    </div>
+    <div class="rule"><h4>3️⃣ Вопрос без хитростей — 吗 в конце</h4>
+      <p>Да/нет-вопрос = обычное предложение + частица 吗. Вопросительный знак ？обязателен, интонация поднимается.</p>
+      <div class="ex">这是你家吗？= Это твой дом?&nbsp;&nbsp;|&nbsp;&nbsp;你很好吗？= Ты хорошо?</div>
+    </div>
+    <div class="rule"><h4>4️⃣ «Очень» — 很 между подлежащим и признаком</h4>
+      <p>Наречие 很 (hěn — очень) стоит перед прилагательным. В китайском оно часто нужно просто для ритма фразы.</p>
+      <div class="ex">我很好。= Я (очень) хорошо。&nbsp;&nbsp;|&nbsp;&nbsp;他很好。= Он хороший человек。</div>
+    </div>
+    <div class="rule" style="background:linear-gradient(135deg,#fff0ec,#fdeeff);">
+      <h4>🎯 Шпаргалка: универсальная формула урока</h4>
+      <p style="font-size:16px;line-height:2;">
+        <span class="formula">(这 / 那 / 他 / 我 / 你) + 是 + кто-что</span><br>
+        <span class="formula">+ 不 → отрицание</span> &nbsp;
+        <span class="formula">+ 吗？→ вопрос</span><br>
+        Составьте свои 5 предложений, меняя только слот «кто-что»: 这是我姐姐。那是我家。这不是北京。你是哪国人？他是我哥哥吗？
+      </p>
+    </div>
+  </div>
+</section>
+
+<footer>Сделано с 🧡 для занятия · 加油！ (Цзяюй — «вперёд!») · Повторите карточки вслух — китайский учится на звуке, а не на глаз.</footer>
+</div>
+</body>
+</html>
